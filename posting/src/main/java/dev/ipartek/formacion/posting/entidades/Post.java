@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -31,16 +32,20 @@ public class Post {
 
 	@Column(name = "texto", length = 240, nullable = false)
 	private String texto;
+	
+	@ManyToMany(mappedBy = "postsFavoritos")
+	private Set<Usuario> gustaA;
 
 	public Post() {
 	}
 
-	public Post(Long id, LocalDate fecha, Usuario usuario, String texto) {
+	public Post(Long id, LocalDate fecha, Usuario usuario, String texto, Set<Usuario> gustaA) {
 		super();
 		this.id = id;
 		this.fecha = fecha;
 		this.usuario = usuario;
 		this.texto = texto;
+		this.gustaA = gustaA;
 	}
 
 	public Long getId() {
@@ -75,9 +80,17 @@ public class Post {
 		this.texto = texto;
 	}
 
+	public Set<Usuario> getGustaA() {
+		return gustaA;
+	}
+
+	public void setGustaA(Set<Usuario> gustaA) {
+		this.gustaA = gustaA;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(fecha, id, texto, usuario);
+		return Objects.hash(fecha, gustaA, id, texto, usuario);
 	}
 
 	@Override
@@ -89,14 +102,17 @@ public class Post {
 		if (getClass() != obj.getClass())
 			return false;
 		Post other = (Post) obj;
-		return Objects.equals(fecha, other.fecha) && Objects.equals(id, other.id) && Objects.equals(texto, other.texto)
+		return Objects.equals(fecha, other.fecha) && Objects.equals(gustaA, other.gustaA)
+				&& Objects.equals(id, other.id) && Objects.equals(texto, other.texto)
 				&& Objects.equals(usuario, other.usuario);
 	}
 
 	@Override
 	public String toString() {
-		return "Post [id=" + id + ", fecha=" + fecha + ", usuario=" + usuario + ", texto=" + texto + "]";
+		return "Post [id=" + id + ", fecha=" + fecha + ", usuario=" + usuario + ", texto=" + texto + ", gustaA="
+				+ gustaA + "]";
 	}
 
+	
 	
 }

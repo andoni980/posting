@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -31,15 +33,24 @@ public class Usuario {
 
 	@OneToMany(mappedBy = "usuario")
 	private Set<Post> posts;
+	
+	@ManyToMany
+	@JoinTable(name = "posts_favoritos",
+		joinColumns = @JoinColumn(name = "usuario_id"),
+		inverseJoinColumns = @JoinColumn(name = "post_id"),
+		foreignKey = @ForeignKey(name = "FK_usuario_gusta_post"),
+		inverseForeignKey = @ForeignKey(name = "FK_usuario_post_gusta"))
+	private Set<Post> postsFavoritos;
 
 	public Usuario() {}
 
-	public Usuario(Long id, String nickName, Rol rol, Set<Post> posts) {
+	public Usuario(Long id, String nickName, Rol rol, Set<Post> posts, Set<Post> postsFavoritos) {
 		super();
 		this.id = id;
 		this.nickName = nickName;
 		this.rol = rol;
 		this.posts = posts;
+		this.postsFavoritos = postsFavoritos;
 	}
 
 	public Long getId() {
@@ -74,9 +85,17 @@ public class Usuario {
 		this.posts = posts;
 	}
 
+	public Set<Post> getPostsFavoritos() {
+		return postsFavoritos;
+	}
+
+	public void setPostsFavoritos(Set<Post> postsFavoritos) {
+		this.postsFavoritos = postsFavoritos;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, nickName, posts, rol);
+		return Objects.hash(id, nickName, posts, postsFavoritos, rol);
 	}
 
 	@Override
@@ -89,13 +108,17 @@ public class Usuario {
 			return false;
 		Usuario other = (Usuario) obj;
 		return Objects.equals(id, other.id) && Objects.equals(nickName, other.nickName)
-				&& Objects.equals(posts, other.posts) && Objects.equals(rol, other.rol);
+				&& Objects.equals(posts, other.posts) && Objects.equals(postsFavoritos, other.postsFavoritos)
+				&& Objects.equals(rol, other.rol);
 	}
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nickName=" + nickName + ", rol=" + rol + ", posts=" + posts + "]";
+		return "Usuario [id=" + id + ", nickName=" + nickName + ", rol=" + rol + ", posts=" + posts
+				+ ", postsFavoritos=" + postsFavoritos + "]";
 	}
+
+	
 	
 	
 
