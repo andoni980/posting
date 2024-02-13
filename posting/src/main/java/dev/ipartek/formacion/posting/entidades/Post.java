@@ -35,6 +35,9 @@ public class Post {
 	
 	@ManyToMany(mappedBy = "postsFavoritos")
 	private Set<Usuario> gustaA;
+	
+	@ManyToMany(mappedBy = "postsGuardados")
+	private Set<Usuario> guardadoPor;
 
 	public Post() {
 	}

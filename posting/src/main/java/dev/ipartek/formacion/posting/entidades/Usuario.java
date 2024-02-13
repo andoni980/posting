@@ -49,6 +49,22 @@ public class Usuario {
 		foreignKey = @ForeignKey(name = "FK_usuario_guarda_post"),
 		inverseForeignKey = @ForeignKey(name = "FK_usuario_post_guarda"))
 	private Set<Post> postsGuardados;
+	
+	@ManyToMany
+	@JoinTable(name = "usuarios_bloqueados",
+		joinColumns = @JoinColumn(name = "usuario_id"),
+		inverseJoinColumns = @JoinColumn(name = "bloqueado_id"),
+		foreignKey = @ForeignKey(name = "FK_usuario_bloquea_a"),
+		inverseForeignKey = @ForeignKey(name = "FK_usuario_es_bloqueado"))
+	private Set<Usuario> bloqueados;
+	
+	@ManyToMany
+	@JoinTable(name = "usuarios_seguidos",
+		joinColumns = @JoinColumn(name = "usuario_id"),
+		inverseJoinColumns = @JoinColumn(name = "usuario_seguido"),
+		foreignKey = @ForeignKey(name = "FK_usuario_seguidor"),
+		inverseForeignKey = @ForeignKey(name = "FK_usuario_seguido"))
+	private Set<Usuario> usuariosSeguidos;
 
 	public Usuario() {}
 
