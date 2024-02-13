@@ -41,16 +41,26 @@ public class Usuario {
 		foreignKey = @ForeignKey(name = "FK_usuario_gusta_post"),
 		inverseForeignKey = @ForeignKey(name = "FK_usuario_post_gusta"))
 	private Set<Post> postsFavoritos;
+	
+	@ManyToMany
+	@JoinTable(name = "posts_guardados",
+		joinColumns = @JoinColumn(name = "usuario_id"),
+		inverseJoinColumns = @JoinColumn(name = "post_id"),
+		foreignKey = @ForeignKey(name = "FK_usuario_guarda_post"),
+		inverseForeignKey = @ForeignKey(name = "FK_usuario_post_guarda"))
+	private Set<Post> postsGuardados;
 
 	public Usuario() {}
 
-	public Usuario(Long id, String nickName, Rol rol, Set<Post> posts, Set<Post> postsFavoritos) {
+	public Usuario(Long id, String nickName, Rol rol, Set<Post> posts, Set<Post> postsFavoritos,
+			Set<Post> postsGuardados) {
 		super();
 		this.id = id;
 		this.nickName = nickName;
 		this.rol = rol;
 		this.posts = posts;
 		this.postsFavoritos = postsFavoritos;
+		this.postsGuardados = postsGuardados;
 	}
 
 	public Long getId() {
@@ -93,9 +103,17 @@ public class Usuario {
 		this.postsFavoritos = postsFavoritos;
 	}
 
+	public Set<Post> getPostsGuardados() {
+		return postsGuardados;
+	}
+
+	public void setPostsGuardados(Set<Post> postsGuardados) {
+		this.postsGuardados = postsGuardados;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, nickName, posts, postsFavoritos, rol);
+		return Objects.hash(id, nickName, posts, postsFavoritos, postsGuardados, rol);
 	}
 
 	@Override
@@ -109,18 +127,13 @@ public class Usuario {
 		Usuario other = (Usuario) obj;
 		return Objects.equals(id, other.id) && Objects.equals(nickName, other.nickName)
 				&& Objects.equals(posts, other.posts) && Objects.equals(postsFavoritos, other.postsFavoritos)
-				&& Objects.equals(rol, other.rol);
+				&& Objects.equals(postsGuardados, other.postsGuardados) && Objects.equals(rol, other.rol);
 	}
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nickName=" + nickName + ", rol=" + rol + ", posts=" + posts
-				+ ", postsFavoritos=" + postsFavoritos + "]";
+		return "Usuario [id=" + id + ", nickName=" + nickName + ", rol=" + rol + "]";
 	}
-
-	
-	
-	
 
 	
 }
